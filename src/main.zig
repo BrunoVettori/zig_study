@@ -1,20 +1,30 @@
 const std = @import("std");
+const zap = @import("zap");
 
-pub const User = struct {
-    power: u64,
-    name: []const u8,
-
-    pub fn diagnose(user: User) void {
-        if (user.power >= 8000) {
-            std.debug.print("{s} porwe is {d}\n", .{ user.name, user.power });
-        }
+fn on_request(r: zap.Request) void {
+    if (r.path) |the_path| {
+        std.debug.print("PATH: {s}\n", .{the_path});
     }
-};
+
+    if (r.query) |the_query| {
+        std.debug.print("QUERY: {s}\n", .{the_query});
+    }
+    r.sendBody("<html><body><h1>Hello from ZAP!!!</h1></body></html>") catch return;
+}
 
 pub fn main() !void {
-    var user = User{ .power = 8999, .name = "Bruno" };
+    var listener = zap.HttpListener.init(.{
+        .port = 3000,
+        .on_request = on_request,
+        .log = true,
+    });
+    try listener.listen();
 
-    user.name = "Alex";
+    std.debug.print("Listening on 0.0.0.0:3000\n", .{});
 
-    user.diagnose();
+    // start worker threads
+    zap.start(.{
+        .threads = 2,
+        .workers = 2,
+    });
 }

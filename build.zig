@@ -64,6 +64,14 @@ pub fn build(b: *std.Build) void {
         .root_module = exe_mod,
     });
 
+    const zap = b.dependency("zap", .{
+        .target = target,
+        .optimize = optimize,
+        .openssl = false, // set to true to enable TLS support
+    });
+
+    exe.root_module.addImport("zap", zap.module("zap"));
+
     // This declares intent for the executable to be installed into the
     // standard location when the user invokes the "install" step (the default
     // step when running `zig build`).
