@@ -9,7 +9,16 @@ fn on_request(r: zap.Request) void {
     if (r.query) |the_query| {
         std.debug.print("QUERY: {s}\n", .{the_query});
     }
-    r.sendBody("<html><body><h1>Hello from ZAP!!!</h1></body></html>") catch return;
+
+    const file = @embedFile("pages/index.html");
+
+    const allocator = std.heap.page_allocator;
+
+    const size = std.mem.replacementSize(u8, file, "{{this}}", "that");
+    const output = allocator.alloc(u8, size) catch return;
+    _ = std.mem.replace(u8, file, "{{this}}", "that", output);
+
+    r.sendBody(output) catch return;
 }
 
 pub fn main() !void {
@@ -18,6 +27,7 @@ pub fn main() !void {
         .on_request = on_request,
         .log = true,
     });
+
     try listener.listen();
 
     std.debug.print("Listening on 0.0.0.0:3000\n", .{});
