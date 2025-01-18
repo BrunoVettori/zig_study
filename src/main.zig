@@ -6,17 +6,17 @@ fn on_request(r: zap.Request) void {
         std.debug.print("PATH: {s}\n", .{the_path});
     }
 
-    if (r.query) |the_query| {
-        std.debug.print("QUERY: {s}\n", .{the_query});
-    }
+    const country: []const u8 = r.query orelse "";
 
     const file = @embedFile("pages/index.html");
 
     const allocator = std.heap.page_allocator;
 
-    const size = std.mem.replacementSize(u8, file, "{{this}}", "that");
+    const size = std.mem.replacementSize(u8, file, "{{country}}", country);
     const output = allocator.alloc(u8, size) catch return;
-    _ = std.mem.replace(u8, file, "{{this}}", "that", output);
+    _ = std.mem.replace(u8, file, "{{country}}", country, output);
+
+    defer allocator.free(output);
 
     r.sendBody(output) catch return;
 }
