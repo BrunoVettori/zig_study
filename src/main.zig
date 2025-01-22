@@ -1,20 +1,20 @@
+const router = @import("./routes/router.zig");
 const std = @import("std");
 const zap = @import("zap");
 
-const router = @import("./routes/router.zig");
-
 pub fn main() !void {
+    try router.setup_routes(std.heap.page_allocator);
+
     var listener = zap.HttpListener.init(.{
-        .port = 3005,
+        .port = 3000,
         .on_request = router.route,
         .log = true,
     });
 
     try listener.listen();
 
-    std.debug.print("Listening on 0.0.0.0:3005\n", .{});
+    std.debug.print("Listening on 0.0.0.0:3000\n", .{});
 
-    // start worker threads
     zap.start(.{
         .threads = 2,
         .workers = 2,
