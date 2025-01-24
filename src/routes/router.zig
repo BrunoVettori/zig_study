@@ -1,7 +1,7 @@
+const index = @import("./index.zig").index;
 const std = @import("std");
 const zap = @import("zap");
 
-const index = @import("./index.zig");
 const static = @import("./static.zig").static;
 const dynamic = @import("./dynamic.zig").dynamic;
 
@@ -21,6 +21,5 @@ pub fn route(req: zap.Request) void {
         }
     }
 
-    const file = @embedFile("../pages/index.html");
-    req.sendBody(file) catch return;
+    index(req);
 }
