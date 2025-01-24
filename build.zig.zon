@@ -27,6 +27,10 @@
             .url = "git+https://github.com/zigzap/zap?ref=v0.9.1#ae5c9278335d8e1133cd6d22707323dda712e120",
             .hash = "12200223d76ab6cd32f75bc2e31463b0b429bb5b2b6fa4ce8f68dea494ca1ec3398b",
         },
+        .pg = .{
+            .url = "git+https://github.com/karlseguin/pg.zig?ref=master#4ddae09948cb1563b394cd724b95de14cc88fc12",
+            .hash = "1220779868e6a2f387addec799f176342f5d9a0277139cdb51336e0c1c1b904fcffa",
+        },
     },
     .paths = .{
         "build.zig",
