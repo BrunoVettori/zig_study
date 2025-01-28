@@ -12,6 +12,7 @@ pub fn main() !void {
         .port = 3000,
         .on_request = router.route,
         .log = true,
+        .public_folder = "public",
     });
 
     try listener.listen();

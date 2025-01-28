@@ -22,4 +22,5 @@ pub fn route(req: zap.Request) void {
     }
 
     index(req);
+    return;
 }
