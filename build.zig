@@ -80,6 +80,8 @@ pub fn build(b: *std.Build) void {
     // the executable from your call to b.addExecutable(...)
     exe.root_module.addImport("pg", pg.module("pg"));
 
+    // ----- COPY PUBLIC TO ZIG-OUT -----
+
     // Create install step (this creates the zig-out/bin directory)
     const install_exe = b.addInstallArtifact(exe, .{});
 
@@ -95,6 +97,8 @@ pub fn build(b: *std.Build) void {
 
     // Add as dependency to default install step
     b.getInstallStep().dependOn(&copy_step.step);
+
+    // ----- COPY PUBLIC TO ZIG-OUT -----
 
     // This declares intent for the executable to be installed into the
     // standard location when the user invokes the "install" step (the default
